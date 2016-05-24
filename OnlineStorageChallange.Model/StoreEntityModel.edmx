@@ -1,0 +1,636 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OnlineStoreChallangeDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="Customer_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Is_VIP" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FactoryShipmentNoteHeader">
+          <Key>
+            <PropertyRef Name="Factory_Shipment_Note_HeaderID" />
+          </Key>
+          <Property Name="Factory_Shipment_Note_HeaderID" Type="int" Nullable="false" />
+          <Property Name="Cost" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FactoryShipmentNoteLine">
+          <Key>
+            <PropertyRef Name="Factory_Shipment_Note_LineID" />
+            <PropertyRef Name="Factory_Shipment_Note_HeaderID" />
+          </Key>
+          <Property Name="Factory_Shipment_Note_LineID" Type="int" Nullable="false" />
+          <Property Name="Factory_Shipment_Note_HeaderID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Line_Cost" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InboundShipmentHeader">
+          <Key>
+            <PropertyRef Name="Inbound_Shipment_HeaderID" />
+          </Key>
+          <Property Name="Inbound_Shipment_HeaderID" Type="int" Nullable="false" />
+          <Property Name="VendorID" Type="int" />
+          <Property Name="ProductID" Type="int" />
+          <Property Name="Cost" Type="numeric" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="InboundShipmentLine">
+          <Key>
+            <PropertyRef Name="Inbound_Shipment_LineID" />
+            <PropertyRef Name="Inbound_Shipment_HeaderID" />
+          </Key>
+          <Property Name="Inbound_Shipment_LineID" Type="int" Nullable="false" />
+          <Property Name="Inbound_Shipment_HeaderID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Line_Cost" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderHeader">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="Total_Price" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Freight_Charge" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Is_Completed" Type="bit" Nullable="false" />
+          <Property Name="Order_Date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderLine">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="OrderLineID" />
+          </Key>
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="OrderLineID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="LineCost" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Product_Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Buy_Price" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Sell_Price" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Margin" Type="numeric" Precision="19" Scale="2" StoreGeneratedPattern="Computed" />
+          <Property Name="Margin_Percent" Type="numeric" Precision="38" Scale="16" StoreGeneratedPattern="Computed" />
+          <Property Name="Quantity_Available" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="VendorID" />
+          </Key>
+          <Property Name="VendorID" Type="int" Nullable="false" />
+          <Property Name="Vendor_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="CustomerID">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FactoryShipmentNoteLine_FactoryShipmentNoteHeader">
+          <End Role="FactoryShipmentNoteHeader" Type="Self.FactoryShipmentNoteHeader" Multiplicity="1" />
+          <End Role="FactoryShipmentNoteLine" Type="Self.FactoryShipmentNoteLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactoryShipmentNoteHeader">
+              <PropertyRef Name="Factory_Shipment_Note_HeaderID" />
+            </Principal>
+            <Dependent Role="FactoryShipmentNoteLine">
+              <PropertyRef Name="Factory_Shipment_Note_HeaderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FactoryShipmentNoteLine_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="FactoryShipmentNoteLine" Type="Self.FactoryShipmentNoteLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="FactoryShipmentNoteLine">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderLine_OrderHeader">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="OrderLine" Type="Self.OrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderLine">
+              <PropertyRef Name="OrderLineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderLine_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="OrderLine" Type="Self.OrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="OrderLine">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="InboundShipmentLine_HeaderID">
+          <End Role="InboundShipmentHeader" Type="Self.InboundShipmentHeader" Multiplicity="1" />
+          <End Role="InboundShipmentLine" Type="Self.InboundShipmentLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InboundShipmentHeader">
+              <PropertyRef Name="Inbound_Shipment_HeaderID" />
+            </Principal>
+            <Dependent Role="InboundShipmentLine">
+              <PropertyRef Name="Inbound_Shipment_HeaderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="InboundShipmentLine_ProductID">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="InboundShipmentLine" Type="Self.InboundShipmentLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="InboundShipmentLine">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ProductID">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="InboundShipmentHeader" Type="Self.InboundShipmentHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="InboundShipmentHeader">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="VendorID">
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+          <End Role="InboundShipmentHeader" Type="Self.InboundShipmentHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="VendorID" />
+            </Principal>
+            <Dependent Role="InboundShipmentHeader">
+              <PropertyRef Name="VendorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="OnlineStoreChallangeDatabaseModelStoreContainer">
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FactoryShipmentNoteHeader" EntityType="Self.FactoryShipmentNoteHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FactoryShipmentNoteLine" EntityType="Self.FactoryShipmentNoteLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InboundShipmentHeader" EntityType="Self.InboundShipmentHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InboundShipmentLine" EntityType="Self.InboundShipmentLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderHeader" EntityType="Self.OrderHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderLine" EntityType="Self.OrderLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="CustomerID" Association="Self.CustomerID">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FactoryShipmentNoteLine_FactoryShipmentNoteHeader" Association="Self.FK_FactoryShipmentNoteLine_FactoryShipmentNoteHeader">
+            <End Role="FactoryShipmentNoteHeader" EntitySet="FactoryShipmentNoteHeader" />
+            <End Role="FactoryShipmentNoteLine" EntitySet="FactoryShipmentNoteLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FactoryShipmentNoteLine_Product" Association="Self.FK_FactoryShipmentNoteLine_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="FactoryShipmentNoteLine" EntitySet="FactoryShipmentNoteLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderLine_OrderHeader" Association="Self.FK_OrderLine_OrderHeader">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="OrderLine" EntitySet="OrderLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderLine_Product" Association="Self.FK_OrderLine_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="OrderLine" EntitySet="OrderLine" />
+          </AssociationSet>
+          <AssociationSet Name="InboundShipmentLine_HeaderID" Association="Self.InboundShipmentLine_HeaderID">
+            <End Role="InboundShipmentHeader" EntitySet="InboundShipmentHeader" />
+            <End Role="InboundShipmentLine" EntitySet="InboundShipmentLine" />
+          </AssociationSet>
+          <AssociationSet Name="InboundShipmentLine_ProductID" Association="Self.InboundShipmentLine_ProductID">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="InboundShipmentLine" EntitySet="InboundShipmentLine" />
+          </AssociationSet>
+          <AssociationSet Name="ProductID" Association="Self.ProductID">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="InboundShipmentHeader" EntitySet="InboundShipmentHeader" />
+          </AssociationSet>
+          <AssociationSet Name="VendorID" Association="Self.VendorID">
+            <End Role="Vendor" EntitySet="Vendor" />
+            <End Role="InboundShipmentHeader" EntitySet="InboundShipmentHeader" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OnlineStoreChallangeDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="OnlineStoreChallangeDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="OnlineStoreChallangeDatabaseModel.Customer" />
+          <EntitySet Name="OrderHeaders" EntityType="OnlineStoreChallangeDatabaseModel.OrderHeader" />
+          <EntitySet Name="OrderLines" EntityType="OnlineStoreChallangeDatabaseModel.OrderLine" />
+          <AssociationSet Name="CustomerID" Association="OnlineStoreChallangeDatabaseModel.CustomerID">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+          </AssociationSet>
+          <AssociationSet Name="OrderLineID" Association="OnlineStoreChallangeDatabaseModel.OrderLineID">
+            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="OrderLine" EntitySet="OrderLines" />
+          </AssociationSet>
+          <EntitySet Name="FactoryShipmentNoteHeaders" EntityType="OnlineStoreChallangeDatabaseModel.FactoryShipmentNoteHeader" />
+          <EntitySet Name="FactoryShipmentNoteLines" EntityType="OnlineStoreChallangeDatabaseModel.FactoryShipmentNoteLine" />
+          <EntitySet Name="InboundShipmentHeaders" EntityType="OnlineStoreChallangeDatabaseModel.InboundShipmentHeader" />
+          <EntitySet Name="InboundShipmentLines" EntityType="OnlineStoreChallangeDatabaseModel.InboundShipmentLine" />
+          <EntitySet Name="Products" EntityType="OnlineStoreChallangeDatabaseModel.Product" />
+          <EntitySet Name="Vendors" EntityType="OnlineStoreChallangeDatabaseModel.Vendor" />
+          <AssociationSet Name="FK_FactoryShipmentNoteLine_FactoryShipmentNoteHeader" Association="OnlineStoreChallangeDatabaseModel.FK_FactoryShipmentNoteLine_FactoryShipmentNoteHeader">
+            <End Role="FactoryShipmentNoteHeader" EntitySet="FactoryShipmentNoteHeaders" />
+            <End Role="FactoryShipmentNoteLine" EntitySet="FactoryShipmentNoteLines" />
+          </AssociationSet>
+          <AssociationSet Name="InboundShipmentLine_HeaderID" Association="OnlineStoreChallangeDatabaseModel.InboundShipmentLine_HeaderID">
+            <End Role="InboundShipmentHeader" EntitySet="InboundShipmentHeaders" />
+            <End Role="InboundShipmentLine" EntitySet="InboundShipmentLines" />
+          </AssociationSet>
+          <AssociationSet Name="ProductID" Association="OnlineStoreChallangeDatabaseModel.ProductID">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="InboundShipmentHeader" EntitySet="InboundShipmentHeaders" />
+          </AssociationSet>
+          <AssociationSet Name="VendorID" Association="OnlineStoreChallangeDatabaseModel.VendorID">
+            <End Role="Vendor" EntitySet="Vendors" />
+            <End Role="InboundShipmentHeader" EntitySet="InboundShipmentHeaders" />
+          </AssociationSet>
+          <AssociationSet Name="InboundShipmentLine_ProductID" Association="OnlineStoreChallangeDatabaseModel.InboundShipmentLine_ProductID">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="InboundShipmentLine" EntitySet="InboundShipmentLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FactoryShipmentNoteLine_Product" Association="OnlineStoreChallangeDatabaseModel.FK_FactoryShipmentNoteLine_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="FactoryShipmentNoteLine" EntitySet="FactoryShipmentNoteLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderLine_Product" Association="OnlineStoreChallangeDatabaseModel.FK_OrderLine_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OrderLine" EntitySet="OrderLines" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="Customer_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Is_VIP" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="OrderHeaders" Relationship="OnlineStoreChallangeDatabaseModel.CustomerID" FromRole="Customer" ToRole="OrderHeader" />
+        </EntityType>
+        <EntityType Name="OrderHeader">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="Total_Price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Freight_Charge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Is_Completed" Type="Boolean" Nullable="false" />
+          <Property Name="Order_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Customer" Relationship="OnlineStoreChallangeDatabaseModel.CustomerID" FromRole="OrderHeader" ToRole="Customer" />
+          <NavigationProperty Name="OrderLines" Relationship="OnlineStoreChallangeDatabaseModel.OrderLineID" FromRole="OrderHeader" ToRole="OrderLine" />
+        </EntityType>
+        <EntityType Name="OrderLine">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="OrderLineID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="OrderLineID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="LineCost" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderHeader" Relationship="OnlineStoreChallangeDatabaseModel.OrderLineID" FromRole="OrderLine" ToRole="OrderHeader" />
+          <NavigationProperty Name="Product" Relationship="OnlineStoreChallangeDatabaseModel.FK_OrderLine_Product" FromRole="OrderLine" ToRole="Product" />
+        </EntityType>
+        <Association Name="CustomerID">
+          <End Type="OnlineStoreChallangeDatabaseModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="OnlineStoreChallangeDatabaseModel.OrderHeader" Role="OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrderLineID">
+          <End Type="OnlineStoreChallangeDatabaseModel.OrderHeader" Role="OrderHeader" Multiplicity="1" />
+          <End Type="OnlineStoreChallangeDatabaseModel.OrderLine" Role="OrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderLine">
+              <PropertyRef Name="OrderLineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FactoryShipmentNoteHeader">
+          <Key>
+            <PropertyRef Name="Factory_Shipment_Note_HeaderID" />
+          </Key>
+          <Property Name="Factory_Shipment_Note_HeaderID" Type="Int32" Nullable="false" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="FactoryShipmentNoteLines" Relationship="OnlineStoreChallangeDatabaseModel.FK_FactoryShipmentNoteLine_FactoryShipmentNoteHeader" FromRole="FactoryShipmentNoteHeader" ToRole="FactoryShipmentNoteLine" />
+        </EntityType>
+        <EntityType Name="FactoryShipmentNoteLine">
+          <Key>
+            <PropertyRef Name="Factory_Shipment_Note_LineID" />
+            <PropertyRef Name="Factory_Shipment_Note_HeaderID" />
+          </Key>
+          <Property Name="Factory_Shipment_Note_LineID" Type="Int32" Nullable="false" />
+          <Property Name="Factory_Shipment_Note_HeaderID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Line_Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="FactoryShipmentNoteHeader" Relationship="OnlineStoreChallangeDatabaseModel.FK_FactoryShipmentNoteLine_FactoryShipmentNoteHeader" FromRole="FactoryShipmentNoteLine" ToRole="FactoryShipmentNoteHeader" />
+          <NavigationProperty Name="Product" Relationship="OnlineStoreChallangeDatabaseModel.FK_FactoryShipmentNoteLine_Product" FromRole="FactoryShipmentNoteLine" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="InboundShipmentHeader">
+          <Key>
+            <PropertyRef Name="Inbound_Shipment_HeaderID" />
+          </Key>
+          <Property Name="Inbound_Shipment_HeaderID" Type="Int32" Nullable="false" />
+          <Property Name="VendorID" Type="Int32" />
+          <Property Name="ProductID" Type="Int32" />
+          <Property Name="Cost" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="InboundShipmentLines" Relationship="OnlineStoreChallangeDatabaseModel.InboundShipmentLine_HeaderID" FromRole="InboundShipmentHeader" ToRole="InboundShipmentLine" />
+          <NavigationProperty Name="Product" Relationship="OnlineStoreChallangeDatabaseModel.ProductID" FromRole="InboundShipmentHeader" ToRole="Product" />
+          <NavigationProperty Name="Vendor" Relationship="OnlineStoreChallangeDatabaseModel.VendorID" FromRole="InboundShipmentHeader" ToRole="Vendor" />
+        </EntityType>
+        <EntityType Name="InboundShipmentLine">
+          <Key>
+            <PropertyRef Name="Inbound_Shipment_LineID" />
+            <PropertyRef Name="Inbound_Shipment_HeaderID" />
+          </Key>
+          <Property Name="Inbound_Shipment_LineID" Type="Int32" Nullable="false" />
+          <Property Name="Inbound_Shipment_HeaderID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Line_Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="InboundShipmentHeader" Relationship="OnlineStoreChallangeDatabaseModel.InboundShipmentLine_HeaderID" FromRole="InboundShipmentLine" ToRole="InboundShipmentHeader" />
+          <NavigationProperty Name="Product" Relationship="OnlineStoreChallangeDatabaseModel.InboundShipmentLine_ProductID" FromRole="InboundShipmentLine" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Product_Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Buy_Price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Sell_Price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Margin" Type="Decimal" Precision="19" Scale="2" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Margin_Percent" Type="Decimal" Precision="38" Scale="16" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="InboundShipmentHeaders" Relationship="OnlineStoreChallangeDatabaseModel.ProductID" FromRole="Product" ToRole="InboundShipmentHeader" />
+          <NavigationProperty Name="InboundShipmentLines" Relationship="OnlineStoreChallangeDatabaseModel.InboundShipmentLine_ProductID" FromRole="Product" ToRole="InboundShipmentLine" />
+          <NavigationProperty Name="FactoryShipmentNoteLines" Relationship="OnlineStoreChallangeDatabaseModel.FK_FactoryShipmentNoteLine_Product" FromRole="Product" ToRole="FactoryShipmentNoteLine" />
+          <NavigationProperty Name="OrderLines" Relationship="OnlineStoreChallangeDatabaseModel.FK_OrderLine_Product" FromRole="Product" ToRole="OrderLine" />
+          <Property Name="Quantity_Available" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="VendorID" />
+          </Key>
+          <Property Name="VendorID" Type="Int32" Nullable="false" />
+          <Property Name="Vendor_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="InboundShipmentHeaders" Relationship="OnlineStoreChallangeDatabaseModel.VendorID" FromRole="Vendor" ToRole="InboundShipmentHeader" />
+        </EntityType>
+        <Association Name="FK_FactoryShipmentNoteLine_FactoryShipmentNoteHeader">
+          <End Type="OnlineStoreChallangeDatabaseModel.FactoryShipmentNoteHeader" Role="FactoryShipmentNoteHeader" Multiplicity="1" />
+          <End Type="OnlineStoreChallangeDatabaseModel.FactoryShipmentNoteLine" Role="FactoryShipmentNoteLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactoryShipmentNoteHeader">
+              <PropertyRef Name="Factory_Shipment_Note_HeaderID" />
+            </Principal>
+            <Dependent Role="FactoryShipmentNoteLine">
+              <PropertyRef Name="Factory_Shipment_Note_HeaderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="InboundShipmentLine_HeaderID">
+          <End Type="OnlineStoreChallangeDatabaseModel.InboundShipmentHeader" Role="InboundShipmentHeader" Multiplicity="1" />
+          <End Type="OnlineStoreChallangeDatabaseModel.InboundShipmentLine" Role="InboundShipmentLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InboundShipmentHeader">
+              <PropertyRef Name="Inbound_Shipment_HeaderID" />
+            </Principal>
+            <Dependent Role="InboundShipmentLine">
+              <PropertyRef Name="Inbound_Shipment_HeaderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ProductID">
+          <End Type="OnlineStoreChallangeDatabaseModel.Product" Role="Product" Multiplicity="0..1" />
+          <End Type="OnlineStoreChallangeDatabaseModel.InboundShipmentHeader" Role="InboundShipmentHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="InboundShipmentHeader">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="VendorID">
+          <End Type="OnlineStoreChallangeDatabaseModel.Vendor" Role="Vendor" Multiplicity="0..1" />
+          <End Type="OnlineStoreChallangeDatabaseModel.InboundShipmentHeader" Role="InboundShipmentHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="VendorID" />
+            </Principal>
+            <Dependent Role="InboundShipmentHeader">
+              <PropertyRef Name="VendorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="InboundShipmentLine_ProductID">
+          <End Type="OnlineStoreChallangeDatabaseModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="OnlineStoreChallangeDatabaseModel.InboundShipmentLine" Role="InboundShipmentLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="InboundShipmentLine">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FactoryShipmentNoteLine_Product">
+          <End Type="OnlineStoreChallangeDatabaseModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="OnlineStoreChallangeDatabaseModel.FactoryShipmentNoteLine" Role="FactoryShipmentNoteLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="FactoryShipmentNoteLine">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderLine_Product">
+          <End Type="OnlineStoreChallangeDatabaseModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="OnlineStoreChallangeDatabaseModel.OrderLine" Role="OrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="OrderLine">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OnlineStoreChallangeDatabaseModelStoreContainer" CdmEntityContainer="OnlineStoreChallangeDatabaseEntities">
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="OnlineStoreChallangeDatabaseModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="Is_VIP" ColumnName="Is_VIP" />
+                <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderHeaders">
+            <EntityTypeMapping TypeName="OnlineStoreChallangeDatabaseModel.OrderHeader">
+              <MappingFragment StoreEntitySet="OrderHeader">
+                <ScalarProperty Name="Order_Date" ColumnName="Order_Date" />
+                <ScalarProperty Name="Is_Completed" ColumnName="Is_Completed" />
+                <ScalarProperty Name="Freight_Charge" ColumnName="Freight_Charge" />
+                <ScalarProperty Name="Total_Price" ColumnName="Total_Price" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderLines">
+            <EntityTypeMapping TypeName="OnlineStoreChallangeDatabaseModel.OrderLine">
+              <MappingFragment StoreEntitySet="OrderLine">
+                <ScalarProperty Name="LineCost" ColumnName="LineCost" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="OrderLineID" ColumnName="OrderLineID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactoryShipmentNoteHeaders">
+            <EntityTypeMapping TypeName="OnlineStoreChallangeDatabaseModel.FactoryShipmentNoteHeader">
+              <MappingFragment StoreEntitySet="FactoryShipmentNoteHeader">
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Factory_Shipment_Note_HeaderID" ColumnName="Factory_Shipment_Note_HeaderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactoryShipmentNoteLines">
+            <EntityTypeMapping TypeName="OnlineStoreChallangeDatabaseModel.FactoryShipmentNoteLine">
+              <MappingFragment StoreEntitySet="FactoryShipmentNoteLine">
+                <ScalarProperty Name="Line_Cost" ColumnName="Line_Cost" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Factory_Shipment_Note_HeaderID" ColumnName="Factory_Shipment_Note_HeaderID" />
+                <ScalarProperty Name="Factory_Shipment_Note_LineID" ColumnName="Factory_Shipment_Note_LineID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InboundShipmentHeaders">
+            <EntityTypeMapping TypeName="OnlineStoreChallangeDatabaseModel.InboundShipmentHeader">
+              <MappingFragment StoreEntitySet="InboundShipmentHeader">
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+                <ScalarProperty Name="Inbound_Shipment_HeaderID" ColumnName="Inbound_Shipment_HeaderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InboundShipmentLines">
+            <EntityTypeMapping TypeName="OnlineStoreChallangeDatabaseModel.InboundShipmentLine">
+              <MappingFragment StoreEntitySet="InboundShipmentLine">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Line_Cost" ColumnName="Line_Cost" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Inbound_Shipment_HeaderID" ColumnName="Inbound_Shipment_HeaderID" />
+                <ScalarProperty Name="Inbound_Shipment_LineID" ColumnName="Inbound_Shipment_LineID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="OnlineStoreChallangeDatabaseModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Quantity_Available" ColumnName="Quantity_Available" />
+                <ScalarProperty Name="Margin_Percent" ColumnName="Margin_Percent" />
+                <ScalarProperty Name="Margin" ColumnName="Margin" />
+                <ScalarProperty Name="Sell_Price" ColumnName="Sell_Price" />
+                <ScalarProperty Name="Buy_Price" ColumnName="Buy_Price" />
+                <ScalarProperty Name="Product_Name" ColumnName="Product_Name" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vendors">
+            <EntityTypeMapping TypeName="OnlineStoreChallangeDatabaseModel.Vendor">
+              <MappingFragment StoreEntitySet="Vendor">
+                <ScalarProperty Name="Vendor_Name" ColumnName="Vendor_Name" />
+                <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

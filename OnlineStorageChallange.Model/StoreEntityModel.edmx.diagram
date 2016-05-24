@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="37b0ced84cc344f6b6a91b21de55cd5c" Name="Diagram1">
+        <EntityTypeShape EntityType="OnlineStoreChallangeDatabaseModel.Customer" Width="1.5" PointX="3.375" PointY="1.375" />
+        <EntityTypeShape EntityType="OnlineStoreChallangeDatabaseModel.OrderHeader" Width="1.5" PointX="5.625" PointY="1" />
+        <EntityTypeShape EntityType="OnlineStoreChallangeDatabaseModel.OrderLine" Width="1.5" PointX="7.875" PointY="1.125" />
+        <AssociationConnector Association="OnlineStoreChallangeDatabaseModel.CustomerID" />
+        <AssociationConnector Association="OnlineStoreChallangeDatabaseModel.OrderLineID" />
+        <EntityTypeShape EntityType="OnlineStoreChallangeDatabaseModel.FactoryShipmentNoteHeader" Width="1.5" PointX="7.75" PointY="5.25" />
+        <EntityTypeShape EntityType="OnlineStoreChallangeDatabaseModel.FactoryShipmentNoteLine" Width="2.875" PointX="10" PointY="4.875" />
+        <EntityTypeShape EntityType="OnlineStoreChallangeDatabaseModel.InboundShipmentHeader" Width="1.5" PointX="3" PointY="5" />
+        <EntityTypeShape EntityType="OnlineStoreChallangeDatabaseModel.InboundShipmentLine" Width="1.875" PointX="5.25" PointY="5" />
+        <EntityTypeShape EntityType="OnlineStoreChallangeDatabaseModel.Product" Width="1.5" PointX="0.75" PointY="5" />
+        <EntityTypeShape EntityType="OnlineStoreChallangeDatabaseModel.Vendor" Width="1.5" PointX="0.75" PointY="2.375" />
+        <AssociationConnector Association="OnlineStoreChallangeDatabaseModel.FK_FactoryShipmentNoteLine_FactoryShipmentNoteHeader" />
+        <AssociationConnector Association="OnlineStoreChallangeDatabaseModel.InboundShipmentLine_HeaderID" />
+        <AssociationConnector Association="OnlineStoreChallangeDatabaseModel.ProductID" />
+        <AssociationConnector Association="OnlineStoreChallangeDatabaseModel.VendorID" />
+        <AssociationConnector Association="OnlineStoreChallangeDatabaseModel.InboundShipmentLine_ProductID" />
+        <AssociationConnector Association="OnlineStoreChallangeDatabaseModel.FK_FactoryShipmentNoteLine_Product" />
+        <AssociationConnector Association="OnlineStoreChallangeDatabaseModel.FK_OrderLine_Product" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
